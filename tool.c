@@ -30,6 +30,12 @@
 // the UART output buffer to <c>.  
 //
 //-----------------------------------------------------------------------------
+void Delay()
+{
+  int x;
+  for (x=0;x<500;x)
+    x++;
+}
 
 char putchar (char c)  {
 

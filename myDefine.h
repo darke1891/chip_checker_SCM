@@ -24,5 +24,6 @@ INT8U KeyScan( void );
 INT16U testChip(INT8U);
 void drawPage(int pageNum, int chipNum);
 void drawRes(unsigned int r, int n);
+void Delay(void);
 
 #endif
