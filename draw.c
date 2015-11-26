@@ -75,44 +75,43 @@ void itoa(unsigned int value,char* c)
 void drawRes(unsigned int r, int n) 
 {
 	int i;
-	unsigned int x, upy, downy;
+	unsigned int p = pinNum[n];
+	unsigned int x, upy, downy, delta;
 	char num[5];
-	if(pinNum[n] == 14)
+	if(p == 14)
 	{
 		x = 27;
 		upy = 61;
-		downy = 197;
-		for(i = 0;i < 14;i ++)
-		{
-			printf("xstr ");
-//			itoa(x, num);
-			printf("%d",x);
-			printf(",");
-			if(i > 6)	
-//				itoa(upy,num);
-				printf("%d",upy);
-			else
-//				itoa(downy,num);
-				printf("%d",downy);
-//			printf("%s",num);
-			printf(",24,20,0,BLACK,");
-			if(r & 0x1)   			//wrong
-				printf("RED,1,1,1,\"");
-			else
-				printf("GREEN,1,1,1,\"");
-			r = (r >> 1);
-//			itoa((unsigned int)i+1,num);
-			printf("%d",i+1);
-			printf("\"");
-			printf("%s",c);
-			if(i < 6)
-				x += 40;
-			if(i > 6)
-				x -= 40;
-		}
+		downy = 193;
+		delta = 40;
 	}
 	else
 	{
-		  return;
-	}	
+		x = 27;
+		upy = 61;
+		downy = 193;
+		delta = 34;
+	}
+	for(i = 0;i < p;i ++)
+	{
+		printf("xstr %d,",x);
+		if(i > p/2-1)	
+			printf("%d",upy);
+		else
+			printf("%d",downy);
+		if(p == 14)
+			printf(",19,19,0,BLACK,");
+		else
+			printf(",19,19,0,BLACK,");	
+		if(r & 0x1)   			//wrong
+			printf("RED,1,1,1,\"");
+		else
+			printf("GREEN,1,1,1,\"");
+		r = (r >> 1);
+		printf("%d\"%s",i+1,c);
+		if(i < p/2-1)
+			x += delta;
+		if(i > p/2-1)
+			x -= delta;
+	}
 }
