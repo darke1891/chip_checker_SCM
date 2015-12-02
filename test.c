@@ -91,7 +91,7 @@ INT16U testChip(INT8U num)
         }
       break;
     default:
-      result = (INT16U)0xFFFF;
+      result = (INT16U)0xFEFE;
   }
 //  P1MDOUT = 0x00;
 //  P2MDOUT = 0x00;

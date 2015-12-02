@@ -1,9 +1,9 @@
 #ifndef _myDefine_h_
 #define _myDefine_h_
+
 #include <C8051F340.h>                 // SFR declarations
 #include <stdio.h>
 #include <stdlib.h>
-
 
 typedef unsigned char  INT8U;
 typedef unsigned int INT16U;
@@ -22,8 +22,14 @@ void UART0_Init (void);
 void UART1_Init (void);
 INT8U KeyScan( void );
 INT16U testChip(INT8U);
+
+// Screen
 void drawPage(int pageNum, int chipNum);
 void drawRes(unsigned int r, int n);
 void Delay(void);
+
+// Mobile
+int getInput();
+void sendOutput(int, int, char *);
 
 #endif
