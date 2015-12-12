@@ -74,6 +74,7 @@ int main (void) {
 	int blueToothConnected = 1;
 	INT16U page = 0;
 	INT16U result = 0;
+    INT16U checking = 0;
 
 	PCA0MD &= ~0x40;                    // Disable Watchdog timer
 	SYSTEMCLOCK_Init ();                // initialize oscillator
@@ -101,9 +102,25 @@ int main (void) {
 	        }
 		}else{
 			INT8U scan = KeyScan();
+		    if (checking)
+		    {
+		     if (scan == K_CHECK)
+		     {
+		       checking = 0;
+		       P3 = P3 & 0xE0;
+		       P4 = P4 & 0xFC;
+		     }
+		     checkLED();
+		     continue;
+		    }
 			UART = 0;
 			switch(scan)
 			{
+		        case K_CHECK:
+		        checking = 1;
+		        P3 = P3 | 0x1F;
+		        P4 = P4 | 0x3;
+		        break;
 				case K1_RELEASE:
 					switch(page) 
 					{
