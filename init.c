@@ -84,13 +84,15 @@ void SYSTEMCLOCK_Init (void)
 
 void PORT_Init (void)
 {  
-   P0SKIP    = 0x03;
-   XBR0 = 0x01;                        // route UART 0 to crossbar
-   XBR2 = 0x01;                        // route UART 1 to crossbar
-   XBR1 = 0x40;                        // enable crossbar
-   P0MDOUT |= 0x11;                    // set P0.4 to push-pull output
-   P3MDOUT |= 0x3F;
-   P4MDOUT |= 0x03;
+  P0SKIP    = 0x03;
+  XBR0 = 0x01;                        // route UART 0 to crossbar
+  XBR2 = 0x01;                        // route UART 1 to crossbar
+  XBR1 = 0x40;                        // enable crossbar
+  P0MDOUT |= 0x11;                    // set P0.4 to push-pull output
+  P3MDOUT = 0x3F;
+  P4MDOUT = 0x03;
+  P1MDOUT = 0x0;
+  P2MDOUT = 0x0;
 }
 
 //-----------------------------------------------------------------------------
