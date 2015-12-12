@@ -84,6 +84,7 @@ void drawRes(unsigned int r, int n)
 		upy = 61;
 		downy = 193;
 		delta = 40;
+		r = ((r & (0x7F)) | (r & 0xFE00) >> 2);
 	}
 	else
 	{
