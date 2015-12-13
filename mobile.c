@@ -11,7 +11,7 @@ int proceedBuffer();
 int proceedString(int);
 
 int getInput();
-void sendOutput(int, int, char *);
+void sendOutput(int, int, INT16U);
 
 int getNumber(int);
 int findSemicolon();
@@ -22,20 +22,30 @@ void myprintint(int n,int t);
 void myprintchar(char c,int t);
 
 
-void sendOutput(int chipNum,int n,char *result) {
-    int mpause = 25;int i;
+void sendOutput(int chipNum,int n,INT16U result) {
+    int mpause = 15;int i;
+    int pin_result;
+    char out;
     UART = 1;
     myprintchar('#',mpause);
     myprintint(syncCount,mpause);
     myprintchar(';',mpause);
     myprintchar('@',mpause);
     myprintint(chipNum,mpause);
-    myprintchar(';',mpause);     
+    myprintchar(';',25);     
     for(i=1;i<n+1;i++){
         myprintchar('p',mpause);
         myprintint(i,mpause);
         myprintchar('s',mpause);
-        myprintchar(result[i],mpause);
+        if(n == 14 && i>=8)
+            pin_result = ((result >> (i+1)) & 1);
+        else
+            pin_result = ((result >> (i-1)) & 1);
+		UART=0;
+		printf("haha%dahah",pin_result);
+		UART=1;
+        out = pin_result + '0';
+        myprintchar(out,mpause);
         myprintchar(';',mpause);
     }
 }
@@ -103,8 +113,7 @@ int findSemicolon(){
         if(buffer[i] == ';'){
             return i;
         }
-    }
-    
+    }  
     return -1;
 }
 
@@ -141,16 +150,15 @@ void mysleep(int time) {
 
 void myprintint(int n,int t) {
     int a = 0;
-
-    mysleep(t); 
     if(n>9){
         printf("%d",n/10);
         mysleep(t);
     }
     printf("%d",n%10);
+	mysleep(25);
 }
 
 void myprintchar(char c,int t) {
-    mysleep(t);
     putchar(c);
+	mysleep(t);
 }

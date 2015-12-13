@@ -73,6 +73,7 @@ int main (void) {
 	int chipNum = 0;
 	int blueToothConnected = 1;
 	INT16U page = 0;
+	// returned result of the test
 	INT16U result = 0;
     INT16U checking = 0;
 
@@ -94,10 +95,11 @@ int main (void) {
 			UART = 1;
 			res = getInput();
 	        if (res != -1) {
-	            //testing number (int chip;)
+	            UART = 0;
+				result = testChip(res);
 				UART = 0;
-				printf("%d,%d\n",res,pin_total[res]);
-	            sendOutput(res,pin_total[res],p);
+				printf("%d,%d,%x\n",res,pin_total[res],result);
+	            sendOutput(res,pin_total[res],result);
 	            res = -1;   
 	        }
 		}else{
