@@ -23,20 +23,17 @@ void myprintchar(char c,int t);
 
 
 void sendOutput(int chipNum,int n,INT16U result) {
-    int mpause = 15;int i;
+    int mpause = 25;int i; int count_pin=0;
     int pin_result;
-    char out;
+    char out,lastchar=0;
     UART = 1;
     myprintchar('#',mpause);
     myprintint(syncCount,mpause);
     myprintchar(';',mpause);
     myprintchar('@',mpause);
     myprintint(chipNum,mpause);
-    myprintchar(';',25);     
+    myprintchar(';',mpause);     
     for(i=1;i<n+1;i++){
-        myprintchar('p',mpause);
-        myprintint(i,mpause);
-        myprintchar('s',mpause);
         if(n == 14 && i>=8)
             pin_result = ((result >> (i+1)) & 1);
         else
@@ -45,9 +42,20 @@ void sendOutput(int chipNum,int n,INT16U result) {
 		printf("haha%dahah",pin_result);
 		UART=1;
         out = pin_result + '0';
-        myprintchar(out,mpause);
-        myprintchar(';',mpause);
+		if(out != lastchar && lastchar != 0){
+			myprintchar('p',mpause);
+	        myprintchar(lastchar,mpause);
+	        myprintchar('s',mpause);
+			myprintint(count_pin,mpause);
+	        myprintchar(';',mpause);
+			count_pin = 0;
+		}lastchar = out;count_pin++;
     }
+	myprintchar('p',mpause);
+	myprintchar(out,mpause);
+	myprintchar('s',mpause);
+	myprintint(count_pin,mpause);
+	myprintchar(';',mpause);
 }
 
 int getInput (void) {
@@ -155,7 +163,7 @@ void myprintint(int n,int t) {
         mysleep(t);
     }
     printf("%d",n%10);
-	mysleep(25);
+	mysleep(t);
 }
 
 void myprintchar(char c,int t) {
