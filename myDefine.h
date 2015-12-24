@@ -31,7 +31,7 @@ void Delay(void);
 
 // Mobile
 int getInput();
-void sendOutput(int, int, char *);
+void sendOutput(int, int, INT16U);
 
 //Test
 INT16U testChip(INT8U);
