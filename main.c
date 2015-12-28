@@ -83,7 +83,7 @@ int main (void) {
 	UART0_Init ();                      // initialize UART0
 	UART1_Init ();                      // initialize UART1
 
-	P3 = P3 & 0xC0;
+	P3 = P3 | 0x1F;
 	UART = 0;
 	if(blueToothConnected == 0){
 		printf("%s",c);
@@ -109,8 +109,7 @@ int main (void) {
 		     if (scan == K_CHECK)
 		     {
 		       checking = 0;
-		       P3 = P3 & 0xE0;
-		       P4 = P4 & 0xFC;
+		       P3 = P3 | 0x1F;
 		     }
 		     checkLED();
 		     continue;
@@ -120,8 +119,7 @@ int main (void) {
 			{
 		        case K_CHECK:
 		        checking = 1;
-		        P3 = P3 | 0x1F;
-		        P4 = P4 | 0x3;
+		        P3 = P3 & 0xE0;
 		        break;
 				case K1_RELEASE:
 					switch(page) 
@@ -170,7 +168,7 @@ int main (void) {
 							result = testChip(chipNum);
 							printf("%s",c);
 							drawRes(result, chipNum);
-							P3 = P3 & 0xC0;
+							P3 = P3 | 0x1F;
 							break;
 						case 3:
 							page = 1;

@@ -175,10 +175,11 @@ INT16U test161()
   INT16U looper,i;
 
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 1);
-  temp8U = setBit8U(temp8U, 2, 0);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 0);
+  temp8U = setBit8U(temp8U, 2, 1);
+  temp8U = setBit8U(temp8U, 3, 1);
+  temp8U = setBit8U(temp8U, 4, 1);
   P3 = temp8U;
   P1MDOUT = 0x7F;
   P2MDOUT = 0x3;
@@ -225,7 +226,7 @@ INT16U test161()
   }
 
   printf("%x\n",result);
-  P3 = P3 & 0xc0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0x0;
   P2MDOUT = 0x0;
   return result;
@@ -285,9 +286,10 @@ INT16U test90()
 
   temp8U = P3;
   temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 0);
-  temp8U = setBit8U(temp8U, 3, 1);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 1);
+  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 4, 0);
   P3 = temp8U;
   P1MDOUT = 0x67;
   P2MDOUT = 0x80;
@@ -364,7 +366,7 @@ INT16U test90()
       }
     }
   }
-  P3 = P3 & 0xc0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0x0;
   P2MDOUT = 0x0;
   return result;
@@ -427,10 +429,11 @@ INT16U test253()
   P1MDOUT = 0x3f;
   P2MDOUT = 0x7e;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 1);
-  temp8U = setBit8U(temp8U, 2, 0);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 0);
+  temp8U = setBit8U(temp8U, 2, 1);
+  temp8U = setBit8U(temp8U, 3, 1);
+  temp8U = setBit8U(temp8U, 4, 1);
   P3 = temp8U;
   nEN = 0x0;
   for (id = 0; id < 0x2; id++)
@@ -468,7 +471,7 @@ INT16U test253()
     }
   P1MDOUT = 0x0;
   P2MDOUT = 0x0;
-  P3 = P3 & 0xc0;
+  P3 = P3 | 0x1F;
   return result;
 }
 
@@ -642,9 +645,10 @@ INT16U test75()
   INT16U i,j,id;
   temp8U = P3;
   temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 0);
-  temp8U = setBit8U(temp8U, 3, 1);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 1);
+  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 4, 0);
   P3 = temp8U;
   P1MDOUT = 0x6e;
   P2MDOUT = 0x10;
@@ -681,7 +685,7 @@ INT16U test75()
   }
   P1MDOUT = 0x0;
   P2MDOUT = 0x0;
-  P3 = P3 & (INT8U)0xC0;
+  P3 = P3 | 0x1F;
   return result;
 }
 void set75( INT8U *CP,
@@ -756,10 +760,10 @@ INT16U test74()
   P1MDOUT = 0x0F;
   P2MDOUT = 0x78;  
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -814,7 +818,7 @@ INT16U test74()
 
   P1MDOUT = 0x00;
   P2MDOUT = 0x00;
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   return result; 
 }
 
@@ -869,10 +873,10 @@ INT16U test125()
   P1MDOUT = 0x1B;
   P2MDOUT = 0x6C;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -935,7 +939,7 @@ INT16U test125()
       result = setBit16U(result,14,1);
     }
   }
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0;
   P2MDOUT = 0;
   return result;
@@ -951,10 +955,10 @@ INT16U test86()
   P1MDOUT = 0x1B;
   P2MDOUT = 0x6C;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -1017,7 +1021,7 @@ INT16U test86()
       result = setBit16U(result,14,1);
     }
   }
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0;
   P2MDOUT = 0;
   return result;
@@ -1033,10 +1037,10 @@ INT16U test27()
   P1MDOUT = 0x1F;
   P2MDOUT = 0x5C;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -1097,7 +1101,7 @@ INT16U test27()
       result = setBit16U(result, 12, 1);
     }
   }
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0;
   P2MDOUT = 0;
   return result;
@@ -1113,10 +1117,10 @@ INT16U test20()
   P1MDOUT = 0x1F;
   P2MDOUT = 0x5C;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -1175,7 +1179,7 @@ INT16U test20()
       result = setBit16U(result, 9, 1);
     }
   }
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0;
   P2MDOUT = 0;
   return result;
@@ -1191,10 +1195,10 @@ INT16U test11()
   P1MDOUT = 0x1F;
   P2MDOUT = 0x5C;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -1256,7 +1260,7 @@ INT16U test11()
       result = setBit16U(result, 12, 1);
     }
   }
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0;
   P2MDOUT = 0;
   return result;
@@ -1272,10 +1276,10 @@ INT16U test04()
   P1MDOUT = 0x15;
   P2MDOUT = 0x54;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -1344,7 +1348,7 @@ INT16U test04()
     }
   }
   printf("\n");
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0;
   P2MDOUT = 0;
   return result;
@@ -1360,10 +1364,10 @@ INT16U test00()
   P1MDOUT = 0x1B;
   P2MDOUT = 0x6C;
   temp8U = P3;
-  temp8U = setBit8U(temp8U, 0, 1);
-  temp8U = setBit8U(temp8U, 1, 0);
-  temp8U = setBit8U(temp8U, 2, 1);
-  temp8U = setBit8U(temp8U, 3, 0);
+  temp8U = setBit8U(temp8U, 0, 0);
+  temp8U = setBit8U(temp8U, 1, 1);
+  temp8U = setBit8U(temp8U, 2, 0);
+  temp8U = setBit8U(temp8U, 3, 1);
   temp8U = setBit8U(temp8U, 5, 1);
   P3 = temp8U;
   printf("\n");
@@ -1426,7 +1430,7 @@ INT16U test00()
       result = setBit16U(result,14,1);
     }
   }
-  P3 = P3 & 0xC0;
+  P3 = P3 | 0x1F;
   P1MDOUT = 0;
   P2MDOUT = 0;
   return result;
@@ -1439,39 +1443,26 @@ void checkLED()
   INT16U index;
   counter = counter + 1;
   if (counter == 0)
-    counter2 = (counter2 + 1) % (0x7);
+    counter2 = (counter2 + 1) % (0x5);
   if (1)//(counter2 & 0x1 == 0)
   {
     index = counter2;
     switch(index)
     {
     case 0:
-      P3 = P3 & 0xE0;
-      P4 = (P4 & 0xFC) | 0x2;
+      P3 = (P3 & 0xE0) | 0x1;
       break;
     case 1:
-      P3 = P3 & 0xE0;
-      P4 = (P4 & 0xFC) | 0x1;
+      P3 = (P3 & 0xE0) | 0x2;
       break;
     case 2:
-      P3 = (P3 & 0xE0) | 0x1;
-      P4 = (P4 & 0xFC);
+      P3 = (P3 & 0xE0) | 0x4;
       break;
     case 3:
-      P3 = (P3 & 0xE0) | 0x2;
-      P4 = (P4 & 0xFC);
+      P3 = (P3 & 0xE0) | 0x8;
       break;
     case 4:
-      P3 = (P3 & 0xE0) | 0x4;
-      P4 = (P4 & 0xFC);
-      break;
-    case 5:
-      P3 = (P3 & 0xE0) | 0x8;
-      P4 = (P4 & 0xFC);
-      break;
-    case 6:
       P3 = (P3 & 0xE0) | 0x10;
-      P4 = (P4 & 0xFC);
       break;
     default:
       break;

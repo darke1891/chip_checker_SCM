@@ -90,7 +90,6 @@ void PORT_Init (void)
   XBR1 = 0x40;                        // enable crossbar
   P0MDOUT |= 0x11;                    // set P0.4 to push-pull output
   P3MDOUT = 0x3F;
-  P4MDOUT = 0x03;
   P1MDOUT = 0x0;
   P2MDOUT = 0x0;
 }
