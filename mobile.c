@@ -1,4 +1,6 @@
-#include "myDefine.h"   
+#include "myDefine.h"
+#include "myRingBuffer.h"
+#include <string.h>   
 
 char buffer[100];
 int bufferLength = 0;
@@ -64,8 +66,10 @@ int getInput (void) {
     int returnResult = 0;
     UART = 1;                
     input_char = getchar2();
-    if(input_char >='#' && input_char <= 'z')
+    if(input_char >='#' && input_char <= 'z'){
         buffer[bufferLength++] = input_char;
+        buffer[bufferLength] = 0;
+    }
     return proceedBuffer();
 }
 
@@ -97,18 +101,30 @@ int proceedString(int rank){
     UART = 0;
     if(buffer[0] == '#'){
 		UART = 0;
-		printf("bef:%s\n",buffer);
+		printf("SOF[bef:%s]EOF\n",buffer);
         bufferToleft(1);
         rank --;
         syncCount = getNumber(rank);
         returnResult = -1;
     }else if(buffer[0] == '@'){
 		UART = 0;
-		printf("bef:%s\n",buffer);
+		printf("SOF[bef:%s]EOF\n",buffer);
         bufferToleft(1);
         rank --;
         chipNum = getNumber(rank);
         returnResult = chipNum;
+    }else if(buffer[0] == 'n'){
+        UART = 0;
+        printf("NAMESOF[bef:%s]EOF\n",buffer);
+        bufferToleft(1);
+        rank --;
+        returnResult = -2;
+    }else if(buffer[0] == 'm'){
+        UART = 0;
+        printf("PASSSOF[bef:%s]EOF\n",buffer);
+        bufferToleft(1);
+        rank --;
+        returnResult = -3;
     }
         bufferToleft(rank+1);
         return returnResult;
@@ -117,7 +133,6 @@ int proceedString(int rank){
 int findSemicolon(){
     int i;
     for(i = 0;i < bufferLength;i++){
-        
         if(buffer[i] == ';'){
             return i;
         }
@@ -129,9 +144,9 @@ int getNumber(int rank){
     int result = 0,i;
     for(i = 0;i< rank;i++){
 		UART = 0;
-		printf("buffer:%s\n",buffer);
-		printf("rank%d\n",rank);
-		printf("get:%c\n",buffer[i]);
+		//printf("SOF[buffer:%s]EOF\n",buffer);
+		//printf("SOF[rank%d]EOF\n",rank);
+		//printf("SOF[get:%c]EOF\n",buffer[i]);
         if(buffer[i]>'9' || buffer[i] < '0'){
             return -1;
     	}
