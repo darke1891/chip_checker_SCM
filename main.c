@@ -1,58 +1,13 @@
 //-----------------------------------------------------------------------------
-// F34x_UART_MultiUART.c
-//-----------------------------------------------------------------------------
-// Copyright 2006 Silicon Laboratories, Inc.
-// http://www.silabs.com
-//
-// Program Description:
-//
-// This program configures UART0 and UART1 to operate in polled mode, suitable
-// for use with the stdio.h functions printf() and scanf().
-//
-// Test code is included for printf() and getchar(), and shows an example
-// of how the putchar() and _getkey() library routines can be overridden to
-// allow for multiple UARTs to be selected by the functions (in this example, 
-// the global variable UART is used to select between UART0 and UART1).
-//
-// The example sets system clock to maximum frequency of 48 MHz.
-//
-// The system clock frequency is stored in a global constant SYSCLK.  The
-// target UART0 baud rate is stored in a global constant BAUDRATE0, and the
-// target UART1 baud rate is stored in a global constant BAUDRATE1.
-//
-//
-// How To Test:
-//
-// 1) Download code to a 'F34x device that is connected to a UART transceiver
-// 2) Connect serial cable from the transceiver to a PC
-// 3) On the PC, open HyperTerminal (or any other terminal program) and connect
-//    to the COM port at <BAUDRATE0>/<BAUDRATE1> and 8-N-1
-// 4) To test UART 0, place jumpers connecting P0.4 to TX and P0.5 to RX on 
-//    C8051F340 Target Board header J12.  To test UART 1, run wires from
-//    P0.0 on J2 to the TX pin of J12, and P0.1 on J2 to the RX pin of J12.
-//
-//
-// FID:          34X000081  
-// Target:       C8051F34x
-// Tool chain:   KEIL C51 7.20 / KEIL EVAL C51
-//               Silicon Laboratories IDE version 2.72
-//
-// Release 1.0
-//    -Initial Revision (PD)
-//    -17 JUL 2006
-//    -Initial Release
-//
-//
-//-----------------------------------------------------------------------------
 // Includes
 //-----------------------------------------------------------------------------
-
 #include "myDefine.h"
+#include "mobile.h"
+#include "myRingBuffer.h"
 
 //-----------------------------------------------------------------------------
 // Global VARIABLES
 //-----------------------------------------------------------------------------
-
 bit UART = 0;                          // '0 is UART0; '1' is UART1
 char c[4] = {0xFF, 0xFF, 0xFF}; 
 int pin_total[] = {14,14,14,14,14,14,14,16,16,14,14,14,16,16,14};
@@ -61,17 +16,16 @@ int pin_total[] = {14,14,14,14,14,14,14,16,16,14,14,14,16,16,14};
 //-----------------------------------------------------------------------------
 // MAIN Routine
 //-----------------------------------------------------------------------------
-
 int main (void) {
 	// mobile side
 	int res = -1;
+	struct RingBuffer *rb = init_RingBuffer();
     char p[20] = {'0','0','1','2','0','1','2',
     '0','1','2','0','1','2','0','1','2','0','1','2'};// START WITH P[1]
-    
 	//
 	char input_char;
 	int chipNum = 0;
-	int blueToothConnected = 1;
+	int blueToothConnected = 9; // 10 blablabla
 	INT16U page = 0;
 	// returned result of the test
 	INT16U result = 0;
@@ -85,26 +39,31 @@ int main (void) {
 
 	P3 = P3 | 0x1F;
 	UART = 0;
-	if(blueToothConnected == 0){
+	updateBluetoothStatus(&blueToothConnected);
+	if(!isBluetoothConnected(blueToothConnected)){
 		printf("%s",c);
 		printf("%s",c);
 		drawPage(0,chipNum);
 	}
 	while (1) {
-		if(blueToothConnected){
+		updateBluetoothStatus(&blueToothConnected);
+		if(isBluetoothConnected(blueToothConnected)){
 			UART = 1;
 			res = getInput();
-	        if (res != -1) {
-	            UART = 0;
+	        if (res > -1) {
 				result = testChip(res);
 				UART = 0;
 				printf("%d,%d,%x\n",res,pin_total[res],result);
 	            sendOutput(res,pin_total[res],result);
 	            res = -1;   
+	        }else if(res == -2){
+	        	changeName();
+	        }else if(res == -3){
+	        	changePass();
 	        }
 		}else{
 			INT8U scan = KeyScan();
-		    if (checking)
+			if (checking)
 		    {
 		     if (scan == K_CHECK)
 		     {

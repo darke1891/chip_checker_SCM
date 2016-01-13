@@ -19,20 +19,20 @@ struct RingBuffer* init_RingBuffer()
  */
 int write_RingBuffer(struct RingBuffer *rb, const char *newdata) 
 {
-    int datalen = strlen(newdata);
+    int datalen = strlen(newdata),last;
     // if ring buffer too small, don't copy at all
     if(datalen > rb->capacity - rb->size - 1)
         return 0;
     // if after copying doesn't surpass highest index
     if(rb->zero + rb->size + datalen < rb->capacity){
         strncpy(rb->bufdata+rb->zero + rb->size,newdata,datalen);
-        int last = rb->zero + rb->size + datalen;
+        last = rb->zero + rb->size + datalen;
         rb->bufdata[last] = 0;
     // if existing data already surpassed highest index
     }else if(rb->zero + rb->size > rb->capacity){
         int firstavailable = rb->zero + rb->size % rb->capacity;
         strncpy(rb->bufdata + firstavailable,newdata,datalen);
-        int last = firstavailable + datalen;
+        last = firstavailable + datalen;
         rb->bufdata[last] = 0;
     // if newdata is split(including final 0 attached to index 0)
     }else{
@@ -51,6 +51,7 @@ int write_RingBuffer(struct RingBuffer *rb, const char *newdata)
  */
 int pop_RingBuffer(struct RingBuffer *rb, char *result, int poplen)
 {
+	const char * pointer ;
     if(poplen <= rb->size){
         // split into two parts
         if(rb->zero + poplen > rb->capacity){
@@ -64,7 +65,7 @@ int pop_RingBuffer(struct RingBuffer *rb, char *result, int poplen)
             strncpy(result,rb->bufdata + rb->zero,poplen);
             result[poplen] = 0;
         }
-        const char * pointer = rb->bufdata + rb->zero;
+        pointer = rb->bufdata + rb->zero;
         rb->zero = (rb->zero+poplen)%rb->capacity;
         rb->size -= poplen;
         return 1;

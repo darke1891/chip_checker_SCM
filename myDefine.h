@@ -1,5 +1,5 @@
-#ifndef _myDefine_h_
-#define _myDefine_h_
+#ifndef __myDefine_h__
+#define __myDefine_h__
 
 #include <C8051F340.h>                 // SFR declarations
 #include <stdio.h>
@@ -28,10 +28,6 @@ INT8U KeyScan( void );
 void drawPage(int pageNum, int chipNum);
 void drawRes(unsigned int r, int n);
 void Delay(void);
-
-// Mobile
-int getInput();
-void sendOutput(int, int, INT16U);
 
 //Test
 INT16U testChip(INT8U);

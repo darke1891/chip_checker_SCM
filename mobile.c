@@ -1,5 +1,7 @@
+#include "mobile.h"
 #include "myDefine.h"
 #include "myRingBuffer.h"
+#include <C8051F340.h>
 #include <string.h>   
 
 char buffer[100];
@@ -12,9 +14,6 @@ char getchar2();
 int proceedBuffer();
 int proceedString(int);
 
-int getInput();
-void sendOutput(int, int, INT16U);
-
 int getNumber(int);
 int findSemicolon();
 void bufferToleft(int);
@@ -23,6 +22,20 @@ void mysleep(int time);
 void myprintint(int n,int t);
 void myprintchar(char c,int t);
 
+void updateBluetoothStatus(int * const bt){
+    if((P3>>7) & 1){
+        if(*bt < 10) *bt = *bt + 1;
+    }else {
+        *bt = 0;
+    }
+    return;
+}
+int isBluetoothConnected(int bt){
+    if(bt >= 10) // == should be ok
+        return 1;
+    else 
+        return 0;
+}
 
 void sendOutput(int chipNum,int n,INT16U result) {
     int mpause = 25;int i; int count_pin=0;
@@ -60,17 +73,21 @@ void sendOutput(int chipNum,int n,INT16U result) {
 	myprintchar(';',mpause);
 }
 
-int getInput (void) {
-
-    char input_char;
+int getInput (/*struct RingBuffer* rb*/) {
+    /*char inputBuffer[30];
+    UART = 1;
+    scanf("%20s",&inputBuffer);
+    UART = 0;
+    printf("%s\n", inputBuffer);*/
+    char input_char = 0;
     int returnResult = 0;
-    UART = 1;                
+    UART = 1;               
     input_char = getchar2();
     if(input_char >='#' && input_char <= 'z'){
         buffer[bufferLength++] = input_char;
         buffer[bufferLength] = 0;
     }
-    return proceedBuffer();
+    return proceedBuffer();/*return -1;*/
 }
 
 char getchar2() {
@@ -165,7 +182,7 @@ void bufferToleft(int n){
 void mysleep(int time) {
     int x1,x2;
     for(x2 = 0;x2 < time;x2){
-        for(x1 = 0;x1 < 20000;x1)//4secs
+        for(x1 = 0;x1 < 20000;x1)
             x1++;
         x2++;
     }
