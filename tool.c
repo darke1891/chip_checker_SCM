@@ -38,6 +38,10 @@ void Delay(void)
 		x++;
 	}
 }
+
+// this function overload putchar, so you send message by serial port when you use printf
+// when UART is 0, you send message by UART 0, which is connected to the LED screen
+// when UART is 1, you send message by UART 1, which is connected to the bluetooth chip
 char putchar (char c)  {
 
    if (UART == 0) {

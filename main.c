@@ -63,7 +63,9 @@ int main (void) {
 	        	bluetoothReset();
 	        }
 		}else{
+			// scan Keys if bluetooth is not connected
 			INT8U scan = KeyScan();
+			// If simple hardware checking is working, we detect 'check stop' signal only.
 			if (checking)
 		    {
 		     if (scan == K_CHECK)
@@ -74,6 +76,7 @@ int main (void) {
 		     checkLED();
 		     continue;
 		    }
+			// set UART 0 so no message is sent by bluetooth.
 			UART = 0;
 			switch(scan)
 			{
@@ -82,6 +85,7 @@ int main (void) {
 		        P3 = P3 & 0xE0;
 		        break;
 				case K1_RELEASE:
+				// K1 means deleting chipNum
 					switch(page) 
 					{
 						case 1:
@@ -97,6 +101,7 @@ int main (void) {
 					}
 					break;
 				case K2_RELEASE:
+				// K2 means  adding chipNum
 					switch(page) 
 					{
 						case 1:
@@ -112,6 +117,7 @@ int main (void) {
 					}
 					break;
 				case K3_RELEASE:
+				// K3 means start chip testing
 					switch(page) 
 					{
 						case 0:
@@ -119,10 +125,12 @@ int main (void) {
 							drawPage(page,chipNum);
 							break;
 						case 1:
+						// the first time you press K3, you will see a confirmation page, and you need to press K3 again
 							page = 2;
 							drawPage(page,chipNum);
 							break;
 						case 2:
+						// the second time you press K3, you start the chip testing
 							page = 3;
 							drawPage(page,chipNum);
 							result = testChip(chipNum);
@@ -131,6 +139,7 @@ int main (void) {
 							P3 = P3 | 0x1F;
 							break;
 						case 3:
+						// after seeing result, you can press K3 to return to chip selecting page
 							page = 1;
 							drawPage(page,chipNum);
 						default:

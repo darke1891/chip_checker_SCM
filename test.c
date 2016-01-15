@@ -3,7 +3,7 @@
 
 static INT8U KeyStatus = 0x0;
 
-
+// scan key to get signals
 INT8U KeyScan( void )
 {
   INT8U btmp;
@@ -60,6 +60,7 @@ INT8U KeyScan( void )
   return K_NONE;
 }
 
+// set the num bit of 8 bit number, in, as b and return the result.
 INT8U setBit8U (INT8U in, int num, INT8U b)
 {
   INT8U result;
@@ -70,6 +71,7 @@ INT8U setBit8U (INT8U in, int num, INT8U b)
   return result;
 }
 
+// get the num bit of 8 bit number, in
 INT8U getBit8U (INT8U in, int num)
 {
   INT8U result;
@@ -81,6 +83,7 @@ INT8U getBit8U (INT8U in, int num)
   return result;
 }
 
+// 16 bit version of setBit8U
 INT16U setBit16U (INT16U in, int num, INT16U b)
 {
   INT16U result;
@@ -91,6 +94,7 @@ INT16U setBit16U (INT16U in, int num, INT16U b)
   return result;
 }
 
+// 16 bit version of getBit8U
 INT16U getBit16U (INT16U in, int num)
 {
   INT16U result;
@@ -102,6 +106,12 @@ INT16U getBit16U (INT16U in, int num)
   return result;
 }
 
+// entry point of testing part.
+// call test functions based on chip number
+// usually testXX() means the test function for 74LSXX
+// setXX() is used to set output bits and get input bits for 74LSXX
+// setXXCP() is used to set output bits and get input bits for 74LSXX, and change clock signal twice, so we can get a rising edge or falling edge
+// faultXX() is used to set return values to show the ports are related to a faulted gate
 INT16U testChip(INT8U num)
 {
   INT16U result = 0;

@@ -89,8 +89,8 @@ void PORT_Init (void)
   XBR0 = 0x01;                        // route UART 0 to crossbar
   XBR2 = 0x01;                        // route UART 1 to crossbar
   XBR1 = 0x40;                        // enable crossbar
-  P0MDOUT |= 0x11;                    // set P0.4 to push-pull output
-  P3MDOUT = 0x3F;
+  P0MDOUT |= 0x11;                    // set P0.4 and P0.5 to push-pull output
+  P3MDOUT = 0x3F;                     // set P3.0 - P3.6 to be ready for output
   P1MDOUT = 0x0;
   P2MDOUT = 0x0;
 }
