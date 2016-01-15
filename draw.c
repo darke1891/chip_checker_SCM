@@ -1,3 +1,4 @@
+#include "draw.h"
 #include "myDefine.h"
 char chipName[15][10] = {"74LS00","74LS04","74LS11","74LS14","74LS20","74LS27","74LS74","74LS75","74LS85","74LS86","74LS90","74LS125","74LS161","74LS253","CD4011"};
 int pinNum[15] = {14,14,14,14,14,14,14,16,16,14,14,14,16,16,14};	
@@ -77,7 +78,7 @@ void drawRes(unsigned int r, int n)
 	int i;
 	unsigned int p = pinNum[n];
 	unsigned int x, upy, downy, delta;
-	char num[5];
+	//char num[5]; warning: unreferenced
 	if(p == 14)
 	{
 		x = 27;

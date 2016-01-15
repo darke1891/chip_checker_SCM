@@ -1,3 +1,4 @@
+#include "test.h"
 #include "myDefine.h"
 
 static INT8U KeyStatus = 0x0;

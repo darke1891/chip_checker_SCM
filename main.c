@@ -4,6 +4,9 @@
 #include "myDefine.h"
 #include "mobile.h"
 #include "myRingBuffer.h"
+#include "test.h"
+#include "init.h"
+#include "draw.h"
 
 //-----------------------------------------------------------------------------
 // Global VARIABLES
@@ -22,10 +25,9 @@ int main (void) {
 	struct RingBuffer *rb = init_RingBuffer();
     char p[20] = {'0','0','1','2','0','1','2',
     '0','1','2','0','1','2','0','1','2','0','1','2'};// START WITH P[1]
-	//
-	char input_char;
+    int blueToothConnected = 9; // 10 blablabla
+	// screen
 	int chipNum = 0;
-	int blueToothConnected = 9; // 10 blablabla
 	INT16U page = 0;
 	// returned result of the test
 	INT16U result = 0;
@@ -48,18 +50,17 @@ int main (void) {
 	while (1) {
 		updateBluetoothStatus(&blueToothConnected);
 		if(isBluetoothConnected(blueToothConnected)){
-			UART = 1;
-			res = getInput();
+			res = getInput(rb);
 	        if (res > -1) {
 				result = testChip(res);
-				UART = 0;
-				printf("%d,%d,%x\n",res,pin_total[res],result);
 	            sendOutput(res,pin_total[res],result);
 	            res = -1;   
-	        }else if(res == -2){
+	        }else if(res == BLUETOOTH_CHANGE_NAME){
 	        	changeName();
-	        }else if(res == -3){
+	        }else if(res == BLUETOOTH_CHANGE_PASS){
 	        	changePass();
+	        }else if(res == BLUETOOTH_RESET){
+	        	bluetoothReset();
 	        }
 		}else{
 			INT8U scan = KeyScan();

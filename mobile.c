@@ -2,40 +2,147 @@
 #include "myDefine.h"
 #include "myRingBuffer.h"
 #include <C8051F340.h>
-#include <string.h>   
+#include <string.h> 
+#include <stdlib.h>  
 
-char buffer[100];
-int bufferLength = 0;
-
-int mydebug = 0;
+/** To keep track of syncing. */
 int syncCount;
 
-char getchar2();
-int proceedBuffer();
-int proceedString(int);
 
-int getNumber(int);
-int findSemicolon();
-void bufferToleft(int);
+/** Due to its incapability of sending buffer too fast,
+ *  this function is implemented to print int with time leap.
+ *  @params n: buffer int
+ *  @params t: time leap
+ */
+void myprintint(int n,int t) 
+{
+    int a = 0;
+    if(n>9){
+        printf("%d",n/10);
+        mysleep(t);
+    }
+    printf("%d",n%10);
+    mysleep(t);
+}
 
-void mysleep(int time);
-void myprintint(int n,int t);
-void myprintchar(char c,int t);
 
-void updateBluetoothStatus(int * const bt){
+/** Due to its incapability of sending buffer too fast,
+ *  this function is implemented to print int with time leap.
+ *  @params c: buffer char
+ *  @params t: time leap
+ */
+void myprintchar(char c,int t) 
+{
+    putchar(c);
+    mysleep(t);
+}
+
+
+/** Getting input from bluetooth. 
+ *  No stuck implementation(scanf waits for '\n').
+ *  @return: 1 if no input, else the char value read from buffer.
+ */
+char getchar2()
+{
+    char c;
+    UART = 1;
+    if (SCON1 & 0x01) {
+        c = SBUF1;
+        SCON1 &= ~0x01;
+    }else
+        c = 1;
+    return  c;
+}
+
+
+/** */
+int proceedString(char const *s,int rank)
+{
+    int returnResult = -1;
+    if(s[0] == '#'){       // sync check
+        syncCount = atoi(s+1);
+        returnResult = -1;
+    }else if(s[0] == '@'){ // return chip number
+        returnResult = atoi(s+1);
+    }else if(s[0] == 'n'){ // change name
+        returnResult = BLUETOOTH_CHANGE_NAME;
+    }else if(s[0] == 'm'){ // change password
+        returnResult = BLUETOOTH_CHANGE_PASS;
+    }else if(s[0] == 'r'){ // reset
+        returnResult = BLUETOOTH_RESET;
+    }
+    return returnResult;
+}
+
+
+/***/
+int proceedBuffer(struct RingBuffer* rb)
+{
+    int rank = -2; // avoid -1
+    int returnres;
+    char s[30];
+    while(rank != -1){
+        rank = find_RingBuffer(rb, ';');
+        if(rank == -1){
+            return -1;
+        }else{
+            if(pop_RingBuffer(rb,s,rank+1)){
+                s[rank] = 0;
+                UART = 0;printf("%s\n", s);
+            }//else log pop error
+        }
+        returnres =  proceedString(s,rank);
+        return returnres;
+    }   
+}
+
+/** No stuck get input function.
+ *  Reads and proceeds from buffer(and stores incomplete 
+ *  messages).
+ *  @params rb: global ring buffer structure pointer.
+ */
+int getInput (struct RingBuffer* rb) 
+{
+    char inputBuffer[35];
+    int maxlen = 30,index = 0;
+    char input_char = getchar2();
+    memset( inputBuffer, 0, sizeof(char)*maxlen );
+    while(input_char != 1 && index < maxlen){
+        // To filter some unwanted chars
+        if(input_char >='#' && input_char <= 'z'){
+            inputBuffer[index++] = input_char;
+            input_char = getchar2();
+        }
+    }
+    write_RingBuffer(rb,inputBuffer);
+    return proceedBuffer(rb);
+}
+
+
+/** Update bluetooth connection value.
+ *  @params bt: value for connection status. connected(==10) or not(>=0&&<10) 
+ */
+void updateBluetoothStatus(int * const bt)
+{
     if((P3>>7) & 1){
         if(*bt < 10) *bt = *bt + 1;
     }else {
         *bt = 0;
     }
-    return;
 }
-int isBluetoothConnected(int bt){
-    if(bt >= 10) // == should be ok
+
+
+/** Check connection status.
+ *  @return bt: connected(1) or not(0)
+ */
+int isBluetoothConnected(int bt)
+{
+    if(bt >= 10) // '==' should be ok
         return 1;
     else 
         return 0;
 }
+
 
 void sendOutput(int chipNum,int n,INT16U result) {
     int mpause = 25;int i; int count_pin=0;
@@ -53,8 +160,6 @@ void sendOutput(int chipNum,int n,INT16U result) {
             pin_result = ((result >> (i+1)) & 1);
         else
             pin_result = ((result >> (i-1)) & 1);
-		UART=0;
-		printf("haha%dahah",pin_result);
 		UART=1;
         out = pin_result + '0';
 		if(out != lastchar && lastchar != 0){
@@ -73,132 +178,17 @@ void sendOutput(int chipNum,int n,INT16U result) {
 	myprintchar(';',mpause);
 }
 
-int getInput (/*struct RingBuffer* rb*/) {
-    /*char inputBuffer[30];
-    UART = 1;
-    scanf("%20s",&inputBuffer);
-    UART = 0;
-    printf("%s\n", inputBuffer);*/
-    char input_char = 0;
-    int returnResult = 0;
-    UART = 1;               
-    input_char = getchar2();
-    if(input_char >='#' && input_char <= 'z'){
-        buffer[bufferLength++] = input_char;
-        buffer[bufferLength] = 0;
-    }
-    return proceedBuffer();/*return -1;*/
+void changeName()
+{
+
 }
 
-char getchar2() {
-    char c;
-    if (SCON1 & 0x01) {
-        c = SBUF1;
-        SCON1 &= ~0x01;
-    }else
-        c = 1;
-    return  c;
+void changePass()
+{
+
 }
 
-int proceedBuffer(){// change later
-    int rank = -2;
-    int returnres;
-    while(rank != -1){
-        int rank = findSemicolon();
-        if(rank == -1){
-            return -1;
-        }
-        returnres =  proceedString(rank);
-        return returnres;
-    }   
-}
-/** */
-int proceedString(int rank){
-    int returnResult = -1,chipNum;
-    UART = 0;
-    if(buffer[0] == '#'){
-		UART = 0;
-		printf("SOF[bef:%s]EOF\n",buffer);
-        bufferToleft(1);
-        rank --;
-        syncCount = getNumber(rank);
-        returnResult = -1;
-    }else if(buffer[0] == '@'){
-		UART = 0;
-		printf("SOF[bef:%s]EOF\n",buffer);
-        bufferToleft(1);
-        rank --;
-        chipNum = getNumber(rank);
-        returnResult = chipNum;
-    }else if(buffer[0] == 'n'){
-        UART = 0;
-        printf("NAMESOF[bef:%s]EOF\n",buffer);
-        bufferToleft(1);
-        rank --;
-        returnResult = -2;
-    }else if(buffer[0] == 'm'){
-        UART = 0;
-        printf("PASSSOF[bef:%s]EOF\n",buffer);
-        bufferToleft(1);
-        rank --;
-        returnResult = -3;
-    }
-        bufferToleft(rank+1);
-        return returnResult;
-}
+void bluetoothReset()
+{
 
-int findSemicolon(){
-    int i;
-    for(i = 0;i < bufferLength;i++){
-        if(buffer[i] == ';'){
-            return i;
-        }
-    }  
-    return -1;
-}
-
-int getNumber(int rank){
-    int result = 0,i;
-    for(i = 0;i< rank;i++){
-		UART = 0;
-		//printf("SOF[buffer:%s]EOF\n",buffer);
-		//printf("SOF[rank%d]EOF\n",rank);
-		//printf("SOF[get:%c]EOF\n",buffer[i]);
-        if(buffer[i]>'9' || buffer[i] < '0'){
-            return -1;
-    	}
-    	result = result * 10 + buffer[i]-'0';
-    }
-    return result;
-}
-
-void bufferToleft(int n){
-    int i;
-    for(i=0;i<bufferLength-n;i++){ //bufferLength>1
-        buffer[i] = buffer[i+1];
-    }bufferLength = bufferLength-n;
-}
-
-void mysleep(int time) {
-    int x1,x2;
-    for(x2 = 0;x2 < time;x2){
-        for(x1 = 0;x1 < 20000;x1)
-            x1++;
-        x2++;
-    }
-}
-
-void myprintint(int n,int t) {
-    int a = 0;
-    if(n>9){
-        printf("%d",n/10);
-        mysleep(t);
-    }
-    printf("%d",n%10);
-	mysleep(t);
-}
-
-void myprintchar(char c,int t) {
-    putchar(c);
-	mysleep(t);
 }
