@@ -180,15 +180,19 @@ void sendOutput(int chipNum,int n,INT16U result) {
 
 void changeName()
 {
-
+	 UART = 1;
+	printf("AT+NAMEjinjiayu");
 }
 
 void changePass()
 {
-
+	  UART = 1;
+	printf("AT+PINjinjiayu");
 }
 
 void bluetoothReset()
 {
-
+	   UART = 1;
+	printf("AT+NAMEHC-06");
+	printf("AT+PIN1234");
 }

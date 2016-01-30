@@ -41,6 +41,7 @@ int main (void) {
 
 	P3 = P3 | 0x1F;
 	UART = 0;
+	printf("haha");
 	updateBluetoothStatus(&blueToothConnected);
 	if(!isBluetoothConnected(blueToothConnected)){
 		printf("%s",c);
