@@ -12,8 +12,8 @@
 // Global VARIABLES
 //-----------------------------------------------------------------------------
 bit UART = 0;                          // '0 is UART0; '1' is UART1
-char c[4] = {0xFF, 0xFF, 0xFF}; 
-int pin_total[] = {14,14,14,14,14,14,14,16,16,14,14,14,16,16,14};
+char c[4] = {0xFF, 0xFF, 0xFF}; 		//This is used at the end of eachinstruction to the screen
+int pin_total[] = {14,14,14,14,14,14,14,16,16,14,14,14,16,16,14};	//number of pins of each chip
 
 
 //-----------------------------------------------------------------------------
@@ -86,9 +86,10 @@ int main (void) {
 		        P3 = P3 & 0xE0;
 		        break;
 				case K1_RELEASE:
-				// K1 means deleting chipNum
+				// K1 means down button
 					switch(page) 
 					{
+						//only at page 1(choose chip type) has function
 						case 1:
 							if(chipNum == 0)
 								chipNum = 14;
@@ -98,13 +99,13 @@ int main (void) {
 							break;
 						default:
 							break;
-
 					}
 					break;
 				case K2_RELEASE:
-				// K2 means  adding chipNum
+				// K2 means  up button
 					switch(page) 
 					{
+						//only at page 1(choose chip type) has function
 						case 1:
 							if(chipNum == 14)
 								chipNum = 0;
@@ -118,20 +119,21 @@ int main (void) {
 					}
 					break;
 				case K3_RELEASE:
-				// K3 means start chip testing
+				// K3 means ok button
 					switch(page) 
 					{
 						case 0:
+						// at page 0(welcome page), turn to page 1(choose page)
 							page = 1;
 							drawPage(page,chipNum);
 							break;
 						case 1:
-						// the first time you press K3, you will see a confirmation page, and you need to press K3 again
+						// at page 1(welcome page), turn to page 2(comfirm page)
 							page = 2;
 							drawPage(page,chipNum);
 							break;
 						case 2:
-						// the second time you press K3, you start the chip testing
+						// at page 2(confirm page), turn to page 3(result page) and start testing,show reslut on screen
 							page = 3;
 							drawPage(page,chipNum);
 							result = testChip(chipNum);
@@ -140,7 +142,7 @@ int main (void) {
 							P3 = P3 | 0x1F;
 							break;
 						case 3:
-						// after seeing result, you can press K3 to return to chip selecting page
+						// at page 3(reslut page), turn to page 1(choose page)
 							page = 1;
 							drawPage(page,chipNum);
 						default:

@@ -1,8 +1,16 @@
 #include "draw.h"
 #include "myDefine.h"
-char chipName[15][10] = {"74LS00","74LS04","74LS11","74LS14","74LS20","74LS27","74LS74","74LS75","74LS85","74LS86","74LS90","74LS125","74LS161","74LS253","CD4011"};
-int pinNum[15] = {14,14,14,14,14,14,14,16,16,14,14,14,16,16,14};	
+/* These functions are used to draw pages on screen*/
 
+char chipName[15][10] = {"74LS00","74LS04","74LS11","74LS14","74LS20","74LS27","74LS74","74LS75","74LS85","74LS86","74LS90","74LS125","74LS161","74LS253","CD4011"};//name of chips
+int pinNum[15] = {14,14,14,14,14,14,14,16,16,14,14,14,16,16,14}; // pin number of each chip
+
+/*this function is used to draw a page on screen
+page 0:welcom page, no use
+page 1:choose page, choose chip type
+page 2:confirm page, confirm that right type of chip is embedded
+page 3 result page, show result of test, but this function will not show reslut, just draw the chip on the screen
+*/
 void drawPage(int pageNum, int chipNum)
 {
 	switch(pageNum)
@@ -72,7 +80,7 @@ void itoa(unsigned int value,char* c)
 
 }
 */
-
+//this function is used to show result of a test at page 3
 void drawRes(unsigned int r, int n) 
 {
 	int i;
@@ -85,6 +93,7 @@ void drawRes(unsigned int r, int n)
 		upy = 61;
 		downy = 193;
 		delta = 40;
+		// for 14_pin chip, bit 0-6, 9-15 shows result of pin 0-13
 		r = ((r & (0x7F)) | (r & 0xFE00) >> 2);
 	}
 	else
@@ -105,9 +114,9 @@ void drawRes(unsigned int r, int n)
 			printf(",19,19,0,BLACK,");
 		else
 			printf(",19,19,0,BLACK,");	
-		if(r & 0x1)   			//wrong
+		if(r & 0x1)   			// bit 1 for wrong
 			printf("RED,1,1,1,\"");
-		else
+		else					// bit 0 for right
 			printf("GREEN,1,1,1,\"");
 		r = (r >> 1);
 		printf("%d\"%s",i+1,c);
