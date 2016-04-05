@@ -13,6 +13,7 @@ page 3 result page, show result of test, but this function will not show reslut,
 */
 void drawPage(int pageNum, int chipNum)
 {
+	UART=0;
 	switch(pageNum)
 	{
 		case 0:
@@ -49,6 +50,10 @@ void drawPage(int pageNum, int chipNum)
 			printf("\"");
 			printf("%s",c);
 			break;
+		case 4:
+			printf("pic 0,0,4");
+			printf("%s",c);
+			break ;
 		default:
 			printf("pic 0,0,1");	
 	}

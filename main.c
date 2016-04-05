@@ -39,18 +39,20 @@ int main (void) {
 	UART0_Init ();                      // initialize UART0
 	UART1_Init ();                      // initialize UART1
 
-	P3 = P3 | 0x1F;
+	P3 = P3 | 0xF;//0X1F??
 	UART = 0;
-	printf("haha");
+	
 	updateBluetoothStatus(&blueToothConnected);
 	if(!isBluetoothConnected(blueToothConnected)){
 		printf("%s",c);
 		printf("%s",c);
 		drawPage(0,chipNum);
 	}
+	
 	while (1) {
 		updateBluetoothStatus(&blueToothConnected);
 		if(isBluetoothConnected(blueToothConnected)){
+			//drawPage(4,chipNum);
 			res = getInput(rb);
 	        if (res > -1) {
 				result = testChip(res);
@@ -152,7 +154,7 @@ int main (void) {
 				default:
 					break;
 			}
-		}
+		}		
 	}
 	return 0;
 }

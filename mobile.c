@@ -180,8 +180,20 @@ void sendOutput(int chipNum,int n,INT16U result) {
 
 void changeName()
 {
-	 UART = 1;
-	printf("AT+NAMEjinjiayu");
+	char s[30];
+	P3 = P3 | (1>>5);
+	mysleep(25);
+	UART = 1;
+	printf("A");
+	mysleep(25);
+	printf("T");
+	//printf("AT+NAMEjinjiayu");
+	mysleep(25);
+	scanf("%s",&s);
+	UART = 0;
+	printf("muamuamua\n");
+	printf("%s",s);
+	//P3 = P3 & (0x11101111);
 }
 
 void changePass()
